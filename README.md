@@ -1,4 +1,4 @@
-This is a method in objective-c that computes an fft, and outputs in the style of numpy and matlab. It is specifically for a real-valued input, whose fft is cleverly, beautifully, and confusingly implemented in the Accelerate framework to conserve memory and increase speed.
+This is a method in objective-c that computes an fft, and outputs in the style of numpy and matlab, i.e. as an actual mathematical fft. It is specifically for a real-valued input, whose fft is cleverly, beautifully, and confusingly implemented in the Accelerate framework to conserve memory and increase speed.
 
 In Accelerate, you have to pack the real valued input into a complex array of half the original length. Values at even numbered indices are stored in the real parts, and values at odd indices are stored in the imaginary parts. At that point you have a structure that's represented as a complex array, even though it's just a packed up version of your real array. You do the packing with the call: vDSP_ctozD((DSPDoubleComplex *)input, 2, &fft_data, 1, nOver2);
 
