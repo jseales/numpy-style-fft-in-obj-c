@@ -6,9 +6,11 @@ Then you call the fft function which is specifically designed to work with the p
 
 The output of vDSP_fft_zripD is packed up a different way. Accelerate takes advantage of the fact that an fft with a real-valued input will always has an output with no imaginary component at two specific indices: the first, and the middle (aka nyquist) indices. So, they're packed together in the first element of the output, with the real part of the nyquist-indexed value packed into the imaginary part of the first element. 
 
-Finally, the output of vDSP_fft_zripD is too big by a factor of 2. (Why? According to Apple, it's "To provide the best possible execution speeds...") So, you have to multiply the result by 0.5.
+Also, Accelerate takes advantage of the fact that a real-valued input to an fft will always produce an output that is symmetrical; the second half (after the nyquist index) will always be the complex conjugate of the mirror image of the first half. That's why they only have to give you the first half. 
 
-Accelrate is fast, and it is beautiful too. The packing strategies ensure that Accelerate is always dealing with a memory block of exactly the same size. Cool. But... the consequence is that they push some slowness and ugliness into your implementation: the 2nd law of cyberaesthetics?
+Finally, the output of vDSP_fft_zripD comes out scaled by a factor of 2. (Why? According to Apple, it's "To provide the best possible execution speeds...") So, you have to multiply the result by 0.5. 
+
+Accelrate is fast, and it is beautiful too. The packing strategies ensure that Accelerate is always dealing with a memory block of exactly the same size. Cool. But... the consequence is that they push some slowness and ugliness into your implementation...   
 
 Thanks to Stack Overflow user Paul R, (http://stackoverflow.com/users/253056/paul-r) whose good clear code that gave me a concrete grasp of what was going on in the apple documentation at https://developer.apple.com/library/ios/documentation/Performance/Conceptual/vDSP_Programming_Guide/UsingFourierTransforms/UsingFourierTransforms.html. 
 
