@@ -6,11 +6,14 @@ Then you call the fft function which is specifically designed to work with the p
 
 The output of vDSP_fft_zripD is packed up a different way. Accelerate takes advantage of the fact that an fft with a real-valued input will always has an output with no imaginary component at two specific indices: the first, and the middle (aka nyquist) indices. So, they're packed together in the first element of the output, with the real part of the nyquist-indexed value packed into the imaginary part of the first element. 
 
-Again, you can avoid the packing and unpacking if you use the complex valued function "vDSP_fft_zipD," but you should probably not do that unless your input is actually complex valued.
+Finally, the output of vDSP_fft_zripD is too big by a factor of 2. (Why? According to Apple, it's "To provide the best possible execution speeds...") So, you have to multiply the result by 0.5.
 
-Thanks to Stack Overflow user Paul R (http://stackoverflow.com/users/253056/paul-r) good clear code that gave me a concrete grasp of what was going on in the apple documentation at https://developer.apple.com/library/ios/documentation/Performance/Conceptual/vDSP_Programming_Guide/UsingFourierTransforms/UsingFourierTransforms.html. 
+Accelrate is fast, and it is beautiful too. The packing strategies ensure that Accelerate is always dealing with a memory block of exactly the same size. Cool. But... the consequences are that they push some slowness and ugliness into your implementation: the 2nd law of cyberaesthetics?
+
+Thanks to Stack Overflow user Paul R, (http://stackoverflow.com/users/253056/paul-r) whose good clear code that gave me a concrete grasp of what was going on in the apple documentation at https://developer.apple.com/library/ios/documentation/Performance/Conceptual/vDSP_Programming_Guide/UsingFourierTransforms/UsingFourierTransforms.html. 
 
 The thread containing Paul R's comment can be viewed at: http://stackoverflow.com/questions/10820488/iphone-accelerate-framework-fft-vs-matlab-fft/10823152#10823152
 
+Again, you can avoid all the packing and unpacking and scaling if you use the complex valued function "vDSP_fft_zipD," but you should probably not do that unless your input is actually complex valued.
 
 
